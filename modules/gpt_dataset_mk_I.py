@@ -4,9 +4,6 @@ from torch.utils.data import Dataset
 
 torch.manual_seed(4444)
 
-# create pytorch custom dataset for the problem at hand
-torch.manual_seed(4444)
-
 class GptDatasetMKI(Dataset):
   """
   **THIS CLASS DOES NOT SUPPORT TOKEN PADDING***
