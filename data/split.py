@@ -1,4 +1,7 @@
 import os
+import re
+
+pattern = r"[$&3]"
 
 # write the dataset to a specific file
 
@@ -13,7 +16,10 @@ def write_file(name,dataset):
 handler = open("shkspr.txt","r")
 text_corpus = list()
 for line in handler:
-    text_corpus.append(line)
+    if  re.match(pattern=pattern,string=line):
+        continue
+    else:
+        text_corpus.append(line)
 
 corpus_size = len(text_corpus)
 train_percentage = 0.8
