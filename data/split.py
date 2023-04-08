@@ -1,7 +1,7 @@
 import os
 import re
 
-pattern = r"[$&3]"
+pattern = r"[3$&]{1,}"
 
 # write the dataset to a specific file
 
