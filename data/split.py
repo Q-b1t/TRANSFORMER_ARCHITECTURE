@@ -1,5 +1,8 @@
+#!/usr/bin/python3
+
 import os
 import re
+import math
 
 pattern = r"[3$&]{1,}"
 
@@ -21,15 +24,26 @@ for line in handler:
     else:
         text_corpus.append(line)
 
+
+# total number of lines in the dataset
 corpus_size = len(text_corpus)
+
+"""
+important parameters: change the dataset_percentage and the train_percentage
+to determine the amount of data that will be taken from the dataset for training
+"""
+dataset_percentage = 0.03
 train_percentage = 0.8
-train_samples_number = int(corpus_size * train_percentage)
+validation_percentage = math.ceil(1 - train_percentage)
+dataset_length = int(corpus_size * dataset_percentage)
+train_samples_number = int(dataset_length * train_percentage)
+validation_samples_number = int(dataset_length * validation_percentage)
 
 # split data
 train_dataset = text_corpus[:train_samples_number]
-validation_dataset = text_corpus[train_samples_number:]
+validation_dataset = text_corpus[train_samples_number:validation_samples_number]
 
-print(f"Total lines: {corpus_size}\nTrain percentage: {train_percentage}\nNumber of train lines: {len(train_dataset)}\nNumber of validation lines: {len(validation_dataset)}")
+print(f"Total lines: {dataset_length}\nTrain percentage: {train_percentage}\nNumber of train lines: {len(train_dataset)}\nNumber of validation lines: {len(validation_dataset)}")
 
 # write data to different files
 train_file_name = "training_data.txt"
