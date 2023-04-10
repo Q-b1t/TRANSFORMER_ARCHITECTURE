@@ -92,7 +92,7 @@ class Block(nn.Module):
 
     return x
 
-class BigramLanguageModelMKII(nn.Module):
+class BigramLanguageModelMKVI(nn.Module):
   def __init__(self,vocab_size,embedding_dimention,block_size,num_heads,head_dropout,device,num_blocks):
     super().__init__()
     self.vocab_size = vocab_size
