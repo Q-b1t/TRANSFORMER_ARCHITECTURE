@@ -32,7 +32,7 @@ corpus_size = len(text_corpus)
 important parameters: change the dataset_percentage and the train_percentage
 to determine the amount of data that will be taken from the dataset for training
 """
-dataset_percentage = 0.15
+dataset_percentage = 0.3
 train_percentage = 0.8
 validation_percentage = math.ceil(1 - train_percentage)
 dataset_length = int(corpus_size * dataset_percentage)
@@ -51,3 +51,4 @@ validation_file_name = "validation_data.txt"
 
 write_file(train_file_name,train_dataset)
 write_file(validation_file_name,validation_dataset)
+
