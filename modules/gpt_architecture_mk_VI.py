@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+import torch.nn.functional as F 
 
 torch.manual_seed(4444)
 
