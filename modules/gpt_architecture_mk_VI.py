@@ -92,7 +92,6 @@ class Block(nn.Module):
 
     return x
 
-# full implementation
 class BigramLanguageModelMKVI(nn.Module):
   def __init__(self,vocab_size,embedding_dimention,block_size,num_heads,head_dropout,device,num_blocks):
     super().__init__()
@@ -103,6 +102,7 @@ class BigramLanguageModelMKVI(nn.Module):
     self.head_dropout = head_dropout
     self.num_heads = num_heads
     self.num_blocks = num_blocks
+    self.device = device
 
     # embedding matrix for each of the tokens
     self.token_embedding = nn.Embedding(self.vocab_size,self.embedding_dimention)
@@ -123,7 +123,7 @@ class BigramLanguageModelMKVI(nn.Module):
     batch,timesteps = context.shape
     # get the logits in shape (BATCH,TIMESTEPS,CHANNELS)
     token_embedding = self.token_embedding(context)
-    pos_embedding = self.position_embedding(torch.arange(timesteps,device = device))
+    pos_embedding = self.position_embedding(torch.arange(timesteps,device = self.device))
     x = token_embedding + pos_embedding
     #x = self.sa_heads(x)
     #x = self.feedfwrd(x)
@@ -152,3 +152,4 @@ class BigramLanguageModelMKVI(nn.Module):
       indx_next = torch.multinomial(probs,num_samples = 1)
       context = torch.cat([context,indx_next],dim = 1)
     return context
+
