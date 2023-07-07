@@ -4,6 +4,12 @@ import os
 import re
 import math
 
+
+class FILE_DOES_NOT_EXIST(Exception):
+    # raise if no input file is supplied
+    pass
+
+
 pattern = r"[3$&]{1,}"
 
 # write the dataset to a specific file
@@ -15,8 +21,20 @@ def write_file(name,dataset):
         print(f"{len(dataset)} were writen into {name}.")
         f.close()
 
+
 # retrieve file corpus
-handler = open("shkspr.txt","r")
+file_name = str(input("Enter the target text file:\n"))
+dataset_percentage = float(input("Enter the percentage [0.0:1.0] of the text file you want to use to create the dataset (recomended: 0.9):\n"))
+train_percentage = float(input("Enter the train-test split [0.0:1.0] (recomended: 0.8):\n"))
+
+
+
+try:
+    handler = open(file_name,"r")
+except:
+    raise FILE_DOES_NOT_EXIST("The file could not be found.")
+    exit()
+
 text_corpus = list()
 for line in handler:
     if  re.match(pattern=pattern,string=line):
@@ -32,8 +50,7 @@ corpus_size = len(text_corpus)
 important parameters: change the dataset_percentage and the train_percentage
 to determine the amount of data that will be taken from the dataset for training
 """
-dataset_percentage = 0.9 # last = 0.15
-train_percentage = 0.8
+
 validation_percentage = math.ceil(1 - train_percentage)
 dataset_length = int(corpus_size * dataset_percentage)
 train_samples_number = int(dataset_length * train_percentage)
