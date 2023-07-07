@@ -16,7 +16,7 @@ class PositionalEncoding(nn.Module):
     # encoding (from formula)
     pos_encoding = torch.zeros(max_len,embedding_dimention)
     pos_list = torch.arange(0,max_len,dtype = torch.float).view(-1,1)
-    division = torch.exp(torch.arange(0, embedding_dimention, 2).float() * (-math.log(10000.0)) / embedding_dimention)
+    division = torch.exp(torch.arange(0, embedding_dimention, 2).float() * (-math.log(10000.0)) / embedding_dimention) 
     pos_encoding[:,0::2] = torch.sin(pos_list * division)
     pos_encoding[:,1::2] = torch.cos(pos_list * division)
 
@@ -81,7 +81,7 @@ class GTPMKII(nn.Module):
   def get_pad_mask(self,matrix,pad_token):
     return (matrix == pad_token)
 
-  def forward(self,source,target):
+  def forward(self,source,target,target_mask = None,source_pad_mask = None,target_pad_mask = None):
     # transform the token into a word embedding
     source = self.embedding(source) * math.sqrt(self.embedding_dimention)
     target = self.embedding(target) * math.sqrt(self.embedding_dimention)
@@ -92,6 +92,6 @@ class GTPMKII(nn.Module):
     source = source.permute(1,0,2)
     target = target.permute(1,0,2)
     # pass everything into the transformer 
-    transformer_out = self.transformer(source,target)
+    transformer_out = self.transformer(source,target,tgt_mask=target_mask, src_key_padding_mask=source_pad_mask, tgt_key_padding_mask=target_pad_mask)
     out = self.out(transformer_out)
     return out
