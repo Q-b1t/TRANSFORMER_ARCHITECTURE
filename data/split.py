@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 
 import os
-import re
 import math
 
 
@@ -9,8 +8,6 @@ class FILE_DOES_NOT_EXIST(Exception):
     # raise if no input file is supplied
     pass
 
-
-pattern = r"[3$&]{1,}"
 
 # write the dataset to a specific file
 
@@ -35,21 +32,16 @@ except:
     raise FILE_DOES_NOT_EXIST("The file could not be found.")
     exit()
 
-text_corpus = list()
-for line in handler:
-    if  re.match(pattern=pattern,string=line):
-        continue
-    else:
-        text_corpus.append(line)
 
+
+with open(file_name,"r") as f:
+    text_corpus = f.read()
+    f.close()
 
 # total number of lines in the dataset
 corpus_size = len(text_corpus)
 
-"""
-important parameters: change the dataset_percentage and the train_percentage
-to determine the amount of data that will be taken from the dataset for training
-"""
+
 
 validation_percentage = math.ceil(1 - train_percentage)
 dataset_length = int(corpus_size * dataset_percentage)
@@ -68,4 +60,10 @@ validation_file_name = "validation_data.txt"
 
 write_file(train_file_name,train_dataset)
 write_file(validation_file_name,validation_dataset)
+
+
+vocab = sorted(list(set(text_corpus)))
+
+print(vocab)
+
 

@@ -24,7 +24,7 @@ class GptDatasetMKIII(Dataset):
   to denote the start and end of sequences repectively. Since the token-index mappings use incremental sequential natural numbers,
   it is recomended to use negative values for the padding tokens of use values greater than the expected vocab size.
   """
-  def __init__(self,target_dir,encoding = "utf-8",block_size = 8,tokenization_mode = "shifted",padding_tokens = {"<SOS>":-1,"<EOS>":-2}):
+  def __init__(self,target_dir,encoding = "utf-8",block_size = 8,tokenization_mode = "shifted",padding_tokens = {"<SOS>":-1,"<EOS>":-2},vocab = None):
     # instance important parameters
     self.text_path = target_dir # directory containing the text corpus
     self.encoding = encoding # encoding used to read the text
@@ -42,6 +42,12 @@ class GptDatasetMKIII(Dataset):
 
     # read and preprocess the dataset
     self.retrieve_raw_text()
+
+    
+    self.vocab = sorted(list(set(self.raw_text))) if vocab is None else vocab # all the characters in the vocab
+    self.vocab.append("<UKN>") # append a special character for unkown characters
+    self.vocab_size = len(self.vocab) # length of the vocab
+      
 
     # create the index mappings
     self.create_index_mappings(padding=self.padding_mode)
@@ -62,8 +68,7 @@ class GptDatasetMKIII(Dataset):
       f.close()
     # save useful parameters as class attributes
     self.corpus_size = len(self.raw_text)
-    self.vocab = sorted(list(set(self.raw_text))) # all the characters in the vocab
-    self.vocab_size = len(self.vocab) # length of the vocab
+
 
   def create_index_mappings(self,padding):
     """
@@ -79,7 +84,7 @@ class GptDatasetMKIII(Dataset):
       self.index_2_sample = self.index_2_sample | self.reverse_tokens
 
     # create the respective encoding and decoding functions
-    self.encode = lambda s: [self.sample_2_index[c] for c in s]
+    self.encode = lambda s: [self.sample_2_index[c] if c in self.sample_2_index.keys() else self.sample_2_index["<UKN>"] for c in s]
     self.decode = lambda l: "".join([self.index_2_sample[i] for i in l])
 
   def uniform_tokenization_mode(self,padding):
