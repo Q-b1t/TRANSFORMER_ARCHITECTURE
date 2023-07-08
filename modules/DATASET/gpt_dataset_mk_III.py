@@ -46,11 +46,12 @@ class GptDatasetMKIII(Dataset):
     
     self.vocab = sorted(list(set(self.raw_text))) if vocab is None else vocab # all the characters in the vocab
     self.vocab.append("<UKN>") # append a special character for unkown characters
-    self.vocab_size = len(self.vocab) # length of the vocab
       
 
     # create the index mappings
     self.create_index_mappings(padding=self.padding_mode)
+
+    self.vocab_size = len(self.vocab) # length of the vocab
 
     if self.token_mode == "uniform":
       self.uniform_tokenization_mode(padding=self.padding_mode)
