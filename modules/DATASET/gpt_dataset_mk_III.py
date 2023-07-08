@@ -88,7 +88,7 @@ class GptDatasetMKIII(Dataset):
 
     # create the respective encoding and decoding functions
     self.encode = lambda s: [self.sample_2_index[c] if c in self.sample_2_index.keys() else self.sample_2_index["<UKN>"] for c in s]
-    self.decode = lambda l: "".join([self.index_2_sample[i] if i in self.index_2_sample.keys() else self.sample_2_index["<UKN>"] for i in l])
+    self.decode = lambda l: "".join([self.index_2_sample[i] if i in self.index_2_sample.keys() else self.index_2_sample[i][self.sample_2_index["<UKN>"]] for i in l])
 
   def uniform_tokenization_mode(self,padding):
     text_encoded = self.encode(self.raw_text)
