@@ -84,6 +84,8 @@ class GptDatasetMKIII(Dataset):
       self.sample_2_index = self.sample_2_index | self.padding_tokens
       self.index_2_sample = self.index_2_sample | self.reverse_tokens
 
+      self.vocab += list(self.padding_tokens.keys())
+
     # create the respective encoding and decoding functions
     self.encode = lambda s: [self.sample_2_index[c] if c in self.sample_2_index.keys() else self.sample_2_index["<UKN>"] for c in s]
     self.decode = lambda l: "".join([self.index_2_sample[i] for i in l])
