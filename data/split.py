@@ -38,7 +38,7 @@ with open(file_name,"r") as f:
     text_corpus = f.read()
     f.close()
 
-text_corpus = re.sub("\s\s+", " ", text_corpus)
+#text_corpus = re.sub("\s\s+", " ", text_corpus)
 
 # total number of lines in the dataset
 corpus_size = len(text_corpus)
